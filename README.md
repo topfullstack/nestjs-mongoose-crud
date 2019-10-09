@@ -47,7 +47,9 @@ Nest.js crud module for mongoose models **without** `@nestjsx/crud`
 1. Test your CRUD APIs: http://localhost:3000/users
 
 ## APIs
+
 e.g. `@Crud()` for `UsersController`
+
 |METHOD|PATH|DESC|
 |--|--|--|
 |GET|/users|Get all users|
