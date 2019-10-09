@@ -1,6 +1,6 @@
 {
   "name": "nestjs-mongoose-crud",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
   "license": "MIT",
