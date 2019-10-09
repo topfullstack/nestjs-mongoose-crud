@@ -34,11 +34,16 @@ export const Crud = function <T>(options: CrudOptions) {
   return target => {
     const Controller = target
     const controller = target.prototype
-    const crudController = new CrudController<T>(options.model, options)
+    const crudController = new CrudController<T>(options.model)
+
+    controller.crudOptions = options
 
 
     const methods = allMethods.filter(v => get(options, `routes.${v}`) !== false)
     for (let method of methods) {
+      if (controller[method]) {
+        continue
+      }
       controller[method] = crudController[method]
       // clone instance decorators
       cloneDecorators(crudController, controller)

@@ -6,6 +6,7 @@ export class ICrudQuery {
   limit?: number
   page?: number
   skip?: number
+  sort?: string | any
   populate?: string | any
 }
 

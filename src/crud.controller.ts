@@ -3,7 +3,7 @@ import { Get, Param, Post, Put, Delete, Body, Query } from '@nestjs/common'
 import { ApiOperation, ApiModelProperty, ApiImplicitQuery } from '@nestjs/swagger'
 import { CrudQuery, ICrudQuery } from './crud-query.decorator';
 import { CrudConfig, defaultPaginate } from "./crud-config";
-import { get } from 'lodash'
+import { get, merge } from 'lodash'
 import { CrudOptions, PaginateKeys } from './crud.interface';
 
 export class CrudPlaceholderDto {
@@ -11,9 +11,7 @@ export class CrudPlaceholderDto {
 }
 
 export class CrudController<T> {
-  constructor(public model: Model<T | any>, public crudOptions: CrudOptions) { }
-
-
+  constructor(public model: Model<T | any>, public crudOptions?: CrudOptions) { }
 
   @Get()
   @ApiOperation({ title: 'Find all records', operationId: 'list' })
@@ -24,13 +22,14 @@ export class CrudController<T> {
     description: 'Query options',
   })
   find(@CrudQuery('query') query: ICrudQuery = {}) {
-    console.log(this.crudOptions)
+    const getOption = (key: string, defaultValue: any = undefined) => get(this.crudOptions, `routes.find.${key}`, defaultValue)
     let {
-      where = {},
-      limit = get(this.crudOptions, 'routes.find.limit', 10),
+      where = getOption('where', {}),
+      limit = getOption('limit', 10),
       page = 1,
       skip = 0,
-      populate = null
+      populate = getOption('populate', undefined),
+      sort = getOption('sort', undefined)
     } = query
 
     if (skip < 1) {
@@ -40,7 +39,7 @@ export class CrudController<T> {
     const paginateKeys: PaginateKeys | false = get(this.crudOptions, 'routes.find.paginate', defaultPaginate)
 
     const find = async () => {
-      const data = await this.model.find().where(where).skip(skip).limit(limit).populate(populate)
+      const data = await this.model.find().where(where).skip(skip).limit(limit).sort(sort).populate(populate)
       if (paginateKeys !== false) {
         const total = await this.model.countDocuments(where)
         return {
@@ -57,8 +56,13 @@ export class CrudController<T> {
 
   @Get(':id')
   @ApiOperation({ title: 'Find a record' })
-  findOne(@Param('id') id: string) {
-    return this.model.findOne(id)
+  findOne(@Param('id') id: string, @CrudQuery('query') query: ICrudQuery = {}) {
+    const getOption = (key: string, defaultValue: any = undefined) => get(this.crudOptions, `routes.find.${key}`, defaultValue)
+    let {
+      where = getOption('where', {}),
+      populate = getOption('populate', undefined),
+    } = query
+    return this.model.findById(id).populate(populate).where(where)
   }
 
   @Post()

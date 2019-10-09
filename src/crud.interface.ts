@@ -11,13 +11,16 @@ export interface CrudRoute {
 export interface CrudRouteWithDto extends CrudRoute {
   dto?: any
 }
-export interface CrudRouteWithPaginate extends CrudRoute {
-  paginate?: PaginateKeys
+export interface CrudRouteForFind extends CrudRoute {
+  paginate?: PaginateKeys | false
   limit?: number
+  populate?: string | any
+  sort?: string | any
+  where?: any
 }
 
 export interface CrudRoutes {
-  find?: CrudRouteWithPaginate | false,
+  find?: CrudRouteForFind | false,
   findOne?: CrudRoute | false,
   create?: CrudRouteWithDto | false,
   update?: CrudRouteWithDto | false,
