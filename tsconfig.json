@@ -6,5 +6,5 @@
     "declaration": true,
     "target": "es2018",
     "outDir": "dist"
-  },
+  }
 }

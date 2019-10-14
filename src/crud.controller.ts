@@ -22,14 +22,13 @@ export class CrudController<T> {
     description: 'Query options',
   })
   find(@CrudQuery('query') query: ICrudQuery = {}) {
-    const getOption = (key: string, defaultValue: any = undefined) => get(this.crudOptions, `routes.find.${key}`, defaultValue)
     let {
-      where = getOption('where', {}),
-      limit = getOption('limit', 10),
+      where = get(this.crudOptions, 'routes.find.where', {}),
+      limit = get(this.crudOptions, 'routes.find.limit', 10),
       page = 1,
       skip = 0,
-      populate = getOption('populate', undefined),
-      sort = getOption('sort', undefined)
+      populate = get(this.crudOptions, 'routes.find.populate', undefined),
+      sort = get(this.crudOptions, 'routes.find.sort', undefined)
     } = query
 
     if (skip < 1) {
@@ -57,23 +56,31 @@ export class CrudController<T> {
   @Get(':id')
   @ApiOperation({ title: 'Find a record' })
   findOne(@Param('id') id: string, @CrudQuery('query') query: ICrudQuery = {}) {
-    const getOption = (key: string, defaultValue: any = undefined) => get(this.crudOptions, `routes.find.${key}`, defaultValue)
     let {
-      where = getOption('where', {}),
-      populate = getOption('populate', undefined),
+      where = get(this.crudOptions, 'routes.findOne.where', {}),
+      populate = get(this.crudOptions, 'routes.findOne.populate', undefined),
+      select = get(this.crudOptions, 'routes.findOne.select', null)
     } = query
-    return this.model.findById(id).populate(populate).where(where)
+    return this.model.findById(id).populate(populate).select(select).where(where)
   }
 
   @Post()
   @ApiOperation({ title: 'Create a record' })
   create(@Body() body: CrudPlaceholderDto) {
+    const transform = get(this.crudOptions, 'routes.create.transform')
+    if (transform) {
+      body = transform(body)
+    }
     return this.model.create(body)
   }
 
   @Put(':id')
   @ApiOperation({ title: 'Update a record' })
   update(@Param('id') id: string, @Body() body: CrudPlaceholderDto) {
+    const transform = get(this.crudOptions, 'routes.create.transform')
+    if (transform) {
+      body = transform(body)
+    }
     return this.model.findByIdAndUpdate(id, body, {
       new: true,
       upsert: false,

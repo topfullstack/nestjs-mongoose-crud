@@ -4,8 +4,8 @@ import { get, merge } from 'lodash'
 export const defaultPaginate = {
   data: 'data',
   total: 'total',
-  lastPage: 'last_page',
-  currentPage: 'current_page',
+  lastPage: 'lastPage',
+  currentPage: 'page',
 }
 
 export class CrudConfig {

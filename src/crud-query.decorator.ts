@@ -8,6 +8,7 @@ export class ICrudQuery {
   skip?: number
   sort?: string | any
   populate?: string | any
+  select?: string | any
 }
 
 export const CrudQuery = createParamDecorator((name = 'query', req: Request) => {
