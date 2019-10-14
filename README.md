@@ -68,10 +68,10 @@ Use a JSON (in string) `query` parameter to find records:
 ## Interfaces
 ```ts
 export interface PaginateKeys {
-  data: string
-  total: string
-  lastPage: string
-  currentPage: string
+  data?: string
+  total?: string
+  lastPage?: string
+  currentPage?: string
 }
 
 export interface CrudRoute {
@@ -79,6 +79,7 @@ export interface CrudRoute {
 }
 export interface CrudRouteWithDto extends CrudRoute {
   dto?: any
+  transform?: (data: any) => any
 }
 export interface CrudRouteForFind extends CrudRoute {
   paginate?: PaginateKeys | false
@@ -87,16 +88,23 @@ export interface CrudRouteForFind extends CrudRoute {
   sort?: string | any
   where?: any
 }
+export interface CrudRouteForFindOne extends CrudRoute {
+  populate?: string | any
+  where?: any
+  select?: any
+}
 
 export interface CrudRoutes {
   find?: CrudRouteForFind | false,
-  findOne?: CrudRoute | false,
+  findOne?: CrudRouteForFindOne | false,
   create?: CrudRouteWithDto | false,
   update?: CrudRouteWithDto | false,
   delete?: CrudRoute | false,
 }
 export interface CrudOptions {
-  model: any
   routes?: CrudRoutes
+}
+export interface CrudOptionsWithModel extends CrudOptions {
+  model: any
 }
 ```
