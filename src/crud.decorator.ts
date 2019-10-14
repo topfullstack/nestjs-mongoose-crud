@@ -2,7 +2,7 @@ import { CrudController, CrudPlaceholderDto } from "./crud.controller";
 import { Document } from "mongoose";
 import { PARAMTYPES_METADATA } from '@nestjs/common/constants'
 import { get, merge } from 'lodash'
-import { CrudOptions } from "./crud.interface";
+import { CrudOptions, CrudOptionsWithModel } from "./crud.interface";
 import { ICrudQuery } from "./crud-query.decorator";
 import { CrudConfig } from "./crud-config";
 
@@ -29,7 +29,7 @@ function clonePropDecorators(from, to, name) {
   })
 }
 
-export const Crud = function <T>(options: CrudOptions) {
+export const Crud = function <T>(options: CrudOptionsWithModel) {
   options = merge({}, CrudConfig.options, options)
   return target => {
     const Controller = target

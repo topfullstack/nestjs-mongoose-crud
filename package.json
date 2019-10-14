@@ -5,6 +5,7 @@
   "typings": "dist/main.d.ts",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "dev": "tsc --watch"
   },
   "devDependencies": {

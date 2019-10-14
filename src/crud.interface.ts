@@ -1,8 +1,8 @@
 export interface PaginateKeys {
-  data: string
-  total: string
-  lastPage: string
-  currentPage: string
+  data?: string
+  total?: string
+  lastPage?: string
+  currentPage?: string
 }
 
 export interface CrudRoute {
@@ -33,6 +33,8 @@ export interface CrudRoutes {
   delete?: CrudRoute | false,
 }
 export interface CrudOptions {
-  model: any
   routes?: CrudRoutes
+}
+export interface CrudOptionsWithModel extends CrudOptions {
+  model: any
 }

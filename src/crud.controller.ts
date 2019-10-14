@@ -77,7 +77,7 @@ export class CrudController<T> {
   @Put(':id')
   @ApiOperation({ title: 'Update a record' })
   update(@Param('id') id: string, @Body() body: CrudPlaceholderDto) {
-    const transform = get(this.crudOptions, 'routes.create.transform')
+    const transform = get(this.crudOptions, 'routes.update.transform')
     if (transform) {
       body = transform(body)
     }

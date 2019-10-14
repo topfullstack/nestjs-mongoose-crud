@@ -10,7 +10,6 @@ export const defaultPaginate = {
 
 export class CrudConfig {
   public static options: CrudOptions = {
-    model: null,
     routes: {
       find: {
         paginate: { ...defaultPaginate }
