@@ -6,7 +6,7 @@ export interface PaginateKeys {
 }
 
 export interface CrudRoute {
-  decorators?: (MethodDecorator | PropertyDecorator)[]
+  decorators?: MethodDecorator[]
 }
 export interface CrudRouteWithDto extends CrudRoute {
   dto?: any

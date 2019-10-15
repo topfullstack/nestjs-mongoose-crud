@@ -29,12 +29,12 @@ function clonePropDecorators(from, to, name) {
   })
 }
 
-export const Crud = function <T>(options: CrudOptionsWithModel) {
+export const Crud = (options: CrudOptionsWithModel) => {
   options = merge({}, CrudConfig.options, options)
   return target => {
     const Controller = target
     const controller = target.prototype
-    const crudController = new CrudController<T>(options.model)
+    const crudController = new CrudController(options.model)
 
     controller.crudOptions = options
 
@@ -47,6 +47,7 @@ export const Crud = function <T>(options: CrudOptionsWithModel) {
       controller[method] = crudController[method]
       // clone instance decorators
       cloneDecorators(crudController, controller)
+      cloneDecorators(crudController[method], controller[method])
       // clone instance method decorators
       clonePropDecorators(crudController, controller, method)
       // clone class "method" decorators
@@ -56,7 +57,7 @@ export const Crud = function <T>(options: CrudOptionsWithModel) {
       const types: [] = Reflect.getMetadata(PARAMTYPES_METADATA, controller, method)
 
       Reflect.decorate([
-        
+
         // replace fake dto to real dto
         Reflect.metadata(PARAMTYPES_METADATA, types.map((v: any) => {
           if (get(v, 'name') === CrudPlaceholderDto.name) {

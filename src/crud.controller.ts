@@ -10,8 +10,8 @@ export class CrudPlaceholderDto {
   fake: string
 }
 
-export class CrudController<T> {
-  constructor(public model: Model<T | any>, public crudOptions?: CrudOptions) { }
+export class CrudController {
+  constructor(public model: Model<{} | any>, public crudOptions?: CrudOptions) { }
 
   @Get()
   @ApiOperation({ title: 'Find all records', operationId: 'list' })
