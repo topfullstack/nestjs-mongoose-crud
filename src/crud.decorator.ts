@@ -44,7 +44,12 @@ export const Crud = (options: CrudOptionsWithModel) => {
       if (controller[method]) {
         continue
       }
-      controller[method] = crudController[method]
+      controller[method] = function test(...args) {
+        return crudController[method].apply(this, args)
+      }
+      Object.defineProperty(controller[method], 'name', {
+        value: method
+      })
       // clone instance decorators
       cloneDecorators(crudController, controller)
       cloneDecorators(crudController[method], controller[method])

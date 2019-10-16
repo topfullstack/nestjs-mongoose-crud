@@ -22,6 +22,7 @@ export class CrudController {
     description: 'Query options',
   })
   find(@CrudQuery('query') query: ICrudQuery = {}) {
+    console.log(this.model)
     let {
       where = get(this.crudOptions, 'routes.find.where', {}),
       limit = get(this.crudOptions, 'routes.find.limit', 10),
