@@ -19,7 +19,7 @@
     "class-transformer": "^0.2.3",
     "class-validator": "^0.10.2",
     "lodash": "^4.17.15",
-    "mongoose": "^5.7.3",
+    "mongoose": "^5.7.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "typescript": "^3.6.3"
