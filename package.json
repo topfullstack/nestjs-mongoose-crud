@@ -1,28 +1,30 @@
 {
   "name": "nestjs-mongoose-crud",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "serve": "tsc --watch"
   },
   "devDependencies": {
     "@nestjs/common": "^6.8.2",
     "@nestjs/core": "^6.8.2",
     "@nestjs/swagger": "^3.1.0",
-    "@typegoose/typegoose": "^6.0.2",
     "@types/express": "^4.17.1",
     "@types/lodash": "^4.14.142",
     "@types/mongoose": "^5.5.19",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.10.2",
+    "class-validator": "^0.11.0",
     "lodash": "^4.17.15",
-    "mongoose": "^5.7.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "typescript": "^3.6.3"
+  },
+  "peerDependencies": {
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.11.2"
   },
   "dependencies": {}
 }

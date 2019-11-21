@@ -1,17 +1,17 @@
 import { CrudController, CrudPlaceholderDto } from "./crud.controller";
-import { Document } from "mongoose";
 import { PARAMTYPES_METADATA } from '@nestjs/common/constants'
 import { get, merge } from 'lodash'
-import { CrudOptions, CrudOptionsWithModel } from "./crud.interface";
-import { ICrudQuery } from "./crud-query.decorator";
+import { CrudOptionsWithModel } from "./crud.interface";
 import { CrudConfig } from "./crud-config";
 
 const CRUD_ROUTES = {
+  config: 'config',
   find: 'find',
   findOne: 'findOne',
   create: 'create',
   update: 'update',
-  delete: 'delete'
+  delete: 'delete',
+
 }
 
 const allMethods = Object.values(CRUD_ROUTES)
@@ -38,10 +38,12 @@ export const Crud = (options: CrudOptionsWithModel) => {
 
     controller.crudOptions = options
 
-
     const methods = allMethods.filter(v => get(options, `routes.${v}`) !== false)
     for (let method of methods) {
       if (controller[method]) {
+        continue
+      }
+      if (!options.config && method === CRUD_ROUTES.config) {
         continue
       }
       controller[method] = function test(...args) {

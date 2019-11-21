@@ -1,17 +1,29 @@
 import { Model, Document } from 'mongoose'
-import { Get, Param, Post, Put, Delete, Body, Query } from '@nestjs/common'
+import { Get, Param, Post, Put, Delete, Body, Query, Req } from '@nestjs/common'
 import { ApiOperation, ApiModelProperty, ApiImplicitQuery } from '@nestjs/swagger'
 import { CrudQuery, ICrudQuery } from './crud-query.decorator';
 import { CrudConfig, defaultPaginate } from "./crud-config";
 import { get, merge } from 'lodash'
-import { CrudOptions, PaginateKeys } from './crud.interface';
+import { CrudOptionsWithModel, PaginateKeys, Fields } from './crud.interface';
+import { CRUD_FIELD_METADATA } from './constants';
 
 export class CrudPlaceholderDto {
   fake: string
 }
 
 export class CrudController {
-  constructor(public model: Model<{} | any>, public crudOptions?: CrudOptions) { }
+  constructor(public model: Model<{} | any>, public crudOptions?: CrudOptionsWithModel) {
+  }
+
+  @Get('config')
+  @ApiOperation({ title: 'API Config', operationId: 'config' })
+  async config(@Req() req) {
+    const { config } = this.crudOptions
+    if (typeof config === 'function') {
+      return config.call(this, req)
+    }
+    return config
+  }
 
   @Get()
   @ApiOperation({ title: 'Find all records', operationId: 'list' })
@@ -81,7 +93,7 @@ export class CrudController {
     if (transform) {
       body = transform(body)
     }
-    return this.model.findByIdAndUpdate(id, body, {
+    return this.model.findOneAndUpdate({ _id: id }, body, {
       new: true,
       upsert: false,
       runValidators: true
@@ -91,7 +103,7 @@ export class CrudController {
   @Delete(':id')
   @ApiOperation({ title: 'Delete a record' })
   delete(@Param('id') id: string) {
-    return this.model.findByIdAndDelete(id)
+    return this.model.findOneAndRemove({ _id: id })
   }
 
 }
