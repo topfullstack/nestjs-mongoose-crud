@@ -1,6 +1,6 @@
 import { Model, Document } from 'mongoose'
 import { Get, Param, Post, Put, Delete, Body, Query, Req } from '@nestjs/common'
-import { ApiOperation, ApiModelProperty, ApiImplicitQuery } from '@nestjs/swagger'
+import { ApiOperation, ApiQuery } from '@nestjs/swagger'
 import { CrudQuery, ICrudQuery } from './crud-query.decorator';
 import { CrudConfig, defaultPaginate } from "./crud-config";
 import { get, merge } from 'lodash'
@@ -16,7 +16,7 @@ export class CrudController {
   }
 
   @Get('config')
-  @ApiOperation({ title: 'API Config', operationId: 'config' })
+  @ApiOperation({ summary: 'API Config', operationId: 'config' })
   async config(@Req() req) {
     const { config } = this.crudOptions
     if (typeof config === 'function') {
@@ -26,8 +26,8 @@ export class CrudController {
   }
 
   @Get()
-  @ApiOperation({ title: 'Find all records', operationId: 'list' })
-  @ApiImplicitQuery({
+  @ApiOperation({ summary: 'Find all records', operationId: 'list' })
+  @ApiQuery({
     name: 'query',
     type: Object,
     required: false,
@@ -66,7 +66,7 @@ export class CrudController {
   }
 
   @Get(':id')
-  @ApiOperation({ title: 'Find a record' })
+  @ApiOperation({ summary: 'Find a record' })
   findOne(@Param('id') id: string, @CrudQuery('query') query: ICrudQuery = {}) {
     let {
       where = get(this.crudOptions, 'routes.findOne.where', {}),
@@ -77,7 +77,7 @@ export class CrudController {
   }
 
   @Post()
-  @ApiOperation({ title: 'Create a record' })
+  @ApiOperation({ summary: 'Create a record' })
   create(@Body() body: CrudPlaceholderDto) {
     const transform = get(this.crudOptions, 'routes.create.transform')
     if (transform) {
@@ -87,7 +87,7 @@ export class CrudController {
   }
 
   @Put(':id')
-  @ApiOperation({ title: 'Update a record' })
+  @ApiOperation({ summary: 'Update a record' })
   update(@Param('id') id: string, @Body() body: CrudPlaceholderDto) {
     const transform = get(this.crudOptions, 'routes.update.transform')
     if (transform) {
@@ -101,7 +101,7 @@ export class CrudController {
   }
 
   @Delete(':id')
-  @ApiOperation({ title: 'Delete a record' })
+  @ApiOperation({ summary: 'Delete a record' })
   delete(@Param('id') id: string) {
     return this.model.findOneAndRemove({ _id: id })
   }
