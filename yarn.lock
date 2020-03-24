@@ -383,20 +383,20 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@nestjs/common@^6.0.5":
-  version "6.11.11"
-  resolved "https://registry.npm.taobao.org/@nestjs/common/download/@nestjs/common-6.11.11.tgz#701da2462a15cc94d55ec863ddd9f2fb0bbd7136"
-  integrity sha1-cB2iRioVzJTVXshj3dny+wu9cTY=
+"@nestjs/common@^7.0.5":
+  version "7.0.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/common/download/@nestjs/common-7.0.5.tgz#244069292d4bbdc338a6700e86e7775f2168260d"
+  integrity sha1-JEBpKS1LvcM4pnAOhud3XyFoJg0=
   dependencies:
     axios "0.19.2"
     cli-color "2.0.0"
     tslib "1.11.1"
-    uuid "7.0.1"
+    uuid "7.0.2"
 
-"@nestjs/core@^6.0.5":
-  version "6.11.11"
-  resolved "https://registry.npm.taobao.org/@nestjs/core/download/@nestjs/core-6.11.11.tgz#2b97a3e9c2a853f5693ed84daf81c1ee3b2782b4"
-  integrity sha1-K5ej6cKoU/VpPthNr4HB7jsngrQ=
+"@nestjs/core@^7.0.5":
+  version "7.0.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/core/download/@nestjs/core-7.0.5.tgz#6fc07527f7b1434cac088322c231539c8a41a416"
+  integrity sha1-b8B1J/exQ0ysCIMiwjFTnIpBpBY=
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
     fast-safe-stringify "2.0.7"
@@ -404,12 +404,12 @@
     object-hash "2.0.3"
     path-to-regexp "3.2.0"
     tslib "1.11.1"
-    uuid "7.0.1"
+    uuid "7.0.2"
 
-"@nestjs/platform-express@^6.0.5":
-  version "6.11.11"
-  resolved "https://registry.npm.taobao.org/@nestjs/platform-express/download/@nestjs/platform-express-6.11.11.tgz#d30ea1f39299e92e080553e893a0afac54f20c6e"
-  integrity sha1-0w6h85KZ6S4IBVPok6CvrFTyDG4=
+"@nestjs/platform-express@^7.0.5":
+  version "7.0.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/platform-express/download/@nestjs/platform-express-7.0.5.tgz#0c84487b0daa006b4062e60a404227cb911806a3"
+  integrity sha1-DIRIew2qAGtAYuYKQEIny5EYBqM=
   dependencies:
     body-parser "1.19.0"
     cors "2.8.5"
@@ -425,10 +425,10 @@
     lodash "4.17.15"
     path-to-regexp "3.2.0"
 
-"@nestjs/testing@^6.0.5":
-  version "6.11.11"
-  resolved "https://registry.npm.taobao.org/@nestjs/testing/download/@nestjs/testing-6.11.11.tgz#c9858e6516cccf923289919764ed9039376d9b3c"
-  integrity sha1-yYWOZRbMz5IyiZGXZO2QOTdtmzw=
+"@nestjs/testing@^7.0.5":
+  version "7.0.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/testing/download/@nestjs/testing-7.0.5.tgz#b6d6ee4de31669e87e231d18b73f2f76e358719c"
+  integrity sha1-ttbuTeMWaeh+Ix0Ytz8vduNYcZw=
   dependencies:
     optional "0.1.4"
     tslib "1.11.1"
@@ -4312,10 +4312,10 @@ utils-merge@1.0.1:
   resolved "https://registry.npm.taobao.org/utils-merge/download/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npm.taobao.org/uuid/download/uuid-7.0.1.tgz?cache=0&sync_timestamp=1583326207173&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-7.0.1.tgz#95ed6ff3d8c881cbf85f0f05cc3915ef994818ef"
-  integrity sha1-le1v89jIgcv4Xw8FzDkV75lIGO8=
+uuid@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.npm.taobao.org/uuid/download/uuid-7.0.2.tgz?cache=0&sync_timestamp=1583326207173&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+  integrity sha1-f/XCA0Z+kfXg2Fz8uq99LrvKm+Y=
 
 uuid@^3.3.2:
   version "3.4.0"
