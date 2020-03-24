@@ -5,6 +5,7 @@ Nest.js crud module for mongoose models **without** `@nestjsx/crud`
 ## Important
 - NestJs 6.x ----> nestjs-mongoose-crud v1.x
 - NestJs 7.x ----> nestjs-mongoose-crud v2.x
+- fix #7
 
 > Nest.js + Typegoose 中文视频教程请移步哔哩哔哩: [全栈之巅](https://space.bilibili.com/341919508)
 
