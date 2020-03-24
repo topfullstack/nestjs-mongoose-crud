@@ -2,20 +2,20 @@
 # yarn lockfile v1
 
 
-"@nestjs/common@^6.8.2":
-  version "6.11.11"
-  resolved "https://registry.npm.taobao.org/@nestjs/common/download/@nestjs/common-6.11.11.tgz#701da2462a15cc94d55ec863ddd9f2fb0bbd7136"
-  integrity sha1-cB2iRioVzJTVXshj3dny+wu9cTY=
+"@nestjs/common@^7.0.5":
+  version "7.0.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/common/download/@nestjs/common-7.0.5.tgz#244069292d4bbdc338a6700e86e7775f2168260d"
+  integrity sha1-JEBpKS1LvcM4pnAOhud3XyFoJg0=
   dependencies:
     axios "0.19.2"
     cli-color "2.0.0"
     tslib "1.11.1"
-    uuid "7.0.1"
+    uuid "7.0.2"
 
-"@nestjs/core@^6.8.2":
-  version "6.11.11"
-  resolved "https://registry.npm.taobao.org/@nestjs/core/download/@nestjs/core-6.11.11.tgz#2b97a3e9c2a853f5693ed84daf81c1ee3b2782b4"
-  integrity sha1-K5ej6cKoU/VpPthNr4HB7jsngrQ=
+"@nestjs/core@^7.0.5":
+  version "7.0.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/core/download/@nestjs/core-7.0.5.tgz#6fc07527f7b1434cac088322c231539c8a41a416"
+  integrity sha1-b8B1J/exQ0ysCIMiwjFTnIpBpBY=
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
     fast-safe-stringify "2.0.7"
@@ -23,7 +23,7 @@
     object-hash "2.0.3"
     path-to-regexp "3.2.0"
     tslib "1.11.1"
-    uuid "7.0.1"
+    uuid "7.0.2"
 
 "@nestjs/swagger@^4.0.9":
   version "4.4.0"
@@ -598,10 +598,10 @@ util-deprecate@~1.0.1:
   resolved "https://registry.npm.taobao.org/util-deprecate/download/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-uuid@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npm.taobao.org/uuid/download/uuid-7.0.1.tgz?cache=0&sync_timestamp=1583326207173&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-7.0.1.tgz#95ed6ff3d8c881cbf85f0f05cc3915ef994818ef"
-  integrity sha1-le1v89jIgcv4Xw8FzDkV75lIGO8=
+uuid@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.npm.taobao.org/uuid/download/uuid-7.0.2.tgz?cache=0&sync_timestamp=1583326207173&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+  integrity sha1-f/XCA0Z+kfXg2Fz8uq99LrvKm+Y=
 
 validator@12.0.0:
   version "12.0.0"
