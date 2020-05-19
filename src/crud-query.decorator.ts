@@ -1,4 +1,4 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import { createParamDecorator } from "@nestjs/common";
 import { Request } from "express";
 
 export class ICrudQuery {
@@ -11,10 +11,9 @@ export class ICrudQuery {
   select?: string | any
 }
 
-export const CrudQuery = createParamDecorator((name = 'query', ctx: ExecutionContext) => {
-  const req: Request = ctx.switchToHttp().getRequest()
+export const CrudQuery = createParamDecorator((name = 'query', req: Request) => {
   try {
-    return JSON.parse(req.query[name])
+    return JSON.parse(req.query[name].toString())
   } catch (e) {
     return {}
   }
