@@ -19,7 +19,7 @@
     "@types/lodash": "^4.14.142",
     "@types/mongoose": "^5.7.7",
     "@types/supertest": "^2.0.8",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.11.1",
     "jest": "^25.1.0",
     "lodash": "^4.17.15",
