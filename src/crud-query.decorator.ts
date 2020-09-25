@@ -14,7 +14,7 @@ export class ICrudQuery {
 export const CrudQuery = createParamDecorator((name = 'query', ctx: ExecutionContext) => {
   const req: Request = ctx.switchToHttp().getRequest()
   try {
-    return JSON.parse(req.query[name])
+    return JSON.parse(String(req.query[name] || ''))
   } catch (e) {
     return {}
   }
