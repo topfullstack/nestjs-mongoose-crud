@@ -38,10 +38,23 @@ Nest.js crud module for mongoose models **without** `@nestjsx/crud`
     import { Crud } from 'nestjs-mongoose-crud'
     import { User } from './user.model';
     import { InjectModel } from 'nestjs-typegoose';
-    import { ModelType } from '@typegoose/typegoose/lib/types';
+    import { ModelType } from '@typegoose/typegoose/lib/types'; import { transform } from '@babel/core';
 
     @Crud({
-      model: User
+      model: User,
+      routes: {
+       global: { // global transform function for all routes, applies first
+         transform: (data, req)  => {
+            return {...data, user: req.user._id};   
+         } 
+       },
+       find: { 
+         transform: (data, req) => {
+            const {user, ...resultData} = data;
+            return resultData; 
+         }  
+       }
+     }   
     })
     @Controller('users')
     export class UsersController {
@@ -84,7 +97,7 @@ export interface CrudRoute {
 }
 export interface CrudRouteWithDto extends CrudRoute {
   dto?: any
-  transform?: (data: any) => any
+  transform?: (data: any, req: any) => any
 }
 export interface CrudRouteForFind extends CrudRoute {
   paginate?: PaginateKeys | false
@@ -92,10 +105,17 @@ export interface CrudRouteForFind extends CrudRoute {
   populate?: string | any
   sort?: string | any
   where?: any
+  transform?: (data: any, req: any) => any
 }
+
+export interface CrudRouteForGlobal {
+  transform?: (data: any, req: any) => any
+}
+
 export interface CrudRouteForFindOne extends CrudRoute {
   populate?: string | any
   where?: any
+  transform?: (data: any, req: any) => any
   select?: any
 }
 
@@ -107,8 +127,9 @@ export interface CrudRoutes {
   create?: CrudRouteWithDto | false,
   update?: CrudRouteWithDto | false,
   delete?: CrudRoute | false,
-
+  global?: CrudRouteForGlobal | false
 }
+
 export interface CrudOptions {
   routes?: CrudRoutes
 }

@@ -6,15 +6,14 @@ import {
   Put,
   Delete,
   Body,
-  Query,
-  Req
+  Req, Request,
 } from "@nestjs/common";
 import { ApiOperation, ApiQuery } from "@nestjs/swagger";
 import { CrudQuery, ICrudQuery } from "./crud-query.decorator";
-import { CrudConfig, defaultPaginate } from "./crud-config";
-import { get, merge } from "lodash";
-import { CrudOptionsWithModel, PaginateKeys, Fields } from "./crud.interface";
-import { CRUD_FIELD_METADATA } from "./constants";
+import { defaultPaginate } from "./crud-config";
+import { get } from "lodash";
+import { CrudOptionsWithModel, PaginateKeys } from "./crud.interface";
+import CrudTransformService from "./crud-transform.service";
 
 export class CrudPlaceholderDto {
   fake?: string;
@@ -24,8 +23,10 @@ export class CrudPlaceholderDto {
 export class CrudController {
   constructor(
     public model: Model<{} | any>,
-    public crudOptions?: CrudOptionsWithModel
-  ) {}
+    public crudOptions?: CrudOptionsWithModel,
+  ) {
+
+  }
 
   @Get("config")
   @ApiOperation({ summary: "API Config", operationId: "config" })
@@ -45,7 +46,7 @@ export class CrudController {
     required: false,
     description: "Query options"
   })
-  find(@CrudQuery("query") query: ICrudQuery = {}) {
+  find(@CrudQuery("query") query: ICrudQuery = {}, @Request() req) {
     let {
       where = get(this.crudOptions, "routes.find.where", {}),
       limit = get(this.crudOptions, "routes.find.limit", 10),
@@ -65,10 +66,12 @@ export class CrudController {
       defaultPaginate
     );
 
+    const whereTransformed = CrudTransformService.transform(this.crudOptions, where, req);
+
     const find = async () => {
       const data = await this.model
         .find()
-        .where(where)
+        .where(whereTransformed)
         .skip(skip)
         .limit(limit)
         .sort(sort)
@@ -89,37 +92,34 @@ export class CrudController {
 
   @Get(":id")
   @ApiOperation({ summary: "Find a record" })
-  findOne(@Param("id") id: string, @CrudQuery("query") query: ICrudQuery = {}) {
+  findOne(@Param("id") id: string, @CrudQuery("query") query: ICrudQuery = {}, @Request() req) {
     let {
       where = get(this.crudOptions, "routes.findOne.where", {}),
       populate = get(this.crudOptions, "routes.findOne.populate", undefined),
       select = get(this.crudOptions, "routes.findOne.select", null)
     } = query;
+
+    const whereTransformed = CrudTransformService.transform(this.crudOptions, where, req);
+
     return this.model
       .findById(id)
       .populate(populate)
       .select(select)
-      .where(where);
+      .where(whereTransformed);
   }
 
   @Post()
   @ApiOperation({ summary: "Create a record" })
-  create(@Body() body: CrudPlaceholderDto) {
-    const transform = get(this.crudOptions, "routes.create.transform");
-    if (transform) {
-      body = transform(body);
-    }
-    return this.model.create(body);
+  create(@Body() body: CrudPlaceholderDto, @Request() req) {
+    const createBody = CrudTransformService.transform(this.crudOptions, body, req);
+    return this.model.create(createBody);
   }
 
   @Put(":id")
   @ApiOperation({ summary: "Update a record" })
-  update(@Param("id") id: string, @Body() body: CrudPlaceholderDto) {
-    const transform = get(this.crudOptions, "routes.update.transform");
-    if (transform) {
-      body = transform(body);
-    }
-    return this.model.findOneAndUpdate({ _id: id }, body, {
+  update(@Param("id") id: string, @Body() body: CrudPlaceholderDto, @Request() req) {
+    const updateBody = CrudTransformService.transform(this.crudOptions, body, req);
+    return this.model.findOneAndUpdate({ _id: id }, updateBody, {
       new: true,
       upsert: false,
       runValidators: true
@@ -128,7 +128,8 @@ export class CrudController {
 
   @Delete(":id")
   @ApiOperation({ summary: "Delete a record" })
-  delete(@Param("id") id: string) {
-    return this.model.findOneAndRemove({ _id: id });
+  delete(@Param("id") id: string, @Request() req) {
+    const conditions = CrudTransformService.transform(this.crudOptions, { _id: id}, req);
+    return this.model.findOneAndRemove(conditions);
   }
 }
