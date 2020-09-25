@@ -15,6 +15,7 @@ export interface CrudRouteWithDto extends CrudRoute {
 export interface CrudRouteForFind extends CrudRoute {
   paginate?: PaginateKeys | false
   limit?: number
+  page?: number
   populate?: string | any
   sort?: string | any
   where?: any
