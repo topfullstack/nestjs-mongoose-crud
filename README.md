@@ -38,8 +38,7 @@ Nest.js crud module for mongoose models **without** `@nestjsx/crud`
     import { Crud } from 'nestjs-mongoose-crud'
     import { User } from './user.model';
     import { InjectModel } from 'nestjs-typegoose';
-    import { ModelType } from '@typegoose/typegoose/lib/types'; import { transform } from '@babel/core';
-
+    import { ModelType } from '@typegoose/typegoose/lib/types';
     @Crud({
       model: User,
       routes: {
