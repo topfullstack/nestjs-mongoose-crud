@@ -1,4 +1,4 @@
-import { Model, Document } from "mongoose";
+import { Model } from 'mongoose';
 import {
   Get,
   Param,
@@ -7,16 +7,17 @@ import {
   Delete,
   Body,
   Req, Request,
-} from "@nestjs/common";
-import { ApiOperation, ApiQuery } from "@nestjs/swagger";
-import { CrudQuery, ICrudQuery } from "./crud-query.decorator";
-import { defaultPaginate } from "./crud-config";
-import { get } from "lodash";
-import { CrudOptionsWithModel, PaginateKeys } from "./crud.interface";
-import CrudTransformService from "./crud-transform.service";
+} from '@nestjs/common';
+import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { CrudQuery, ICrudQuery } from './crud-query.decorator';
+import { defaultPaginate } from './crud-config';
+import { get } from 'lodash';
+import { CrudOptionsWithModel, PaginateKeys } from './crud.interface';
+import CrudTransformService from './crud-transform.service';
 
 export class CrudPlaceholderDto {
   fake?: string;
+
   [key: string]: any;
 }
 
@@ -28,32 +29,32 @@ export class CrudController {
 
   }
 
-  @Get("config")
-  @ApiOperation({ summary: "API Config", operationId: "config" })
+  @Get('config')
+  @ApiOperation({ summary: 'API Config', operationId: 'config' })
   async config(@Req() req) {
     const { config } = this.crudOptions;
-    if (typeof config === "function") {
+    if (typeof config === 'function') {
       return config.call(this, req);
     }
     return config;
   }
 
   @Get()
-  @ApiOperation({ summary: "Find all records", operationId: "list" })
+  @ApiOperation({ summary: 'Find all records', operationId: 'list' })
   @ApiQuery({
-    name: "query",
+    name: 'query',
     type: String,
     required: false,
-    description: "Query options"
+    description: 'Query options',
   })
-  find(@CrudQuery("query") query: ICrudQuery = {}, @Request() req) {
+  find(@CrudQuery('query') query: ICrudQuery = {}, @Request() req) {
     let {
-      where = get(this.crudOptions, "routes.find.where", {}),
-      limit = get(this.crudOptions, "routes.find.limit", 10),
+      where = get(this.crudOptions, 'routes.find.where', {}),
+      limit = get(this.crudOptions, 'routes.find.limit', 10),
       page = 1,
       skip = 0,
-      populate = get(this.crudOptions, "routes.find.populate", undefined),
-      sort = get(this.crudOptions, "routes.find.sort", undefined)
+      populate = get(this.crudOptions, 'routes.find.populate', undefined),
+      sort = get(this.crudOptions, 'routes.find.sort', undefined),
     } = query;
 
     if (skip < 1) {
@@ -62,16 +63,20 @@ export class CrudController {
 
     const paginateKeys: PaginateKeys | false = get(
       this.crudOptions,
-      "routes.find.paginate",
-      defaultPaginate
+      'routes.find.paginate',
+      defaultPaginate,
     );
-
-    const whereTransformed = CrudTransformService.transform(this.crudOptions, where, req);
+    const filter = CrudTransformService.filter({
+      options: this.crudOptions,
+      data: where,
+      req: req,
+      method: 'find',
+    });
 
     const find = async () => {
       const data = await this.model
         .find()
-        .where(whereTransformed)
+        .where(filter)
         .skip(skip)
         .limit(limit)
         .sort(sort)
@@ -82,7 +87,7 @@ export class CrudController {
           [paginateKeys.total]: total,
           [paginateKeys.data]: data,
           [paginateKeys.lastPage]: Math.ceil(total / limit),
-          [paginateKeys.currentPage]: page
+          [paginateKeys.currentPage]: page,
         };
       }
       return data;
@@ -90,46 +95,72 @@ export class CrudController {
     return find();
   }
 
-  @Get(":id")
-  @ApiOperation({ summary: "Find a record" })
-  findOne(@Param("id") id: string, @CrudQuery("query") query: ICrudQuery = {}, @Request() req) {
+  @Get(':id')
+  @ApiOperation({ summary: 'Find a record' })
+  findOne(@Param('id') id: string, @CrudQuery('query') query: ICrudQuery = {}, @Request() req) {
     let {
-      where = get(this.crudOptions, "routes.findOne.where", {}),
-      populate = get(this.crudOptions, "routes.findOne.populate", undefined),
-      select = get(this.crudOptions, "routes.findOne.select", null)
+      where = get(this.crudOptions, 'routes.findOne.where', {}),
+      populate = get(this.crudOptions, 'routes.findOne.populate', undefined),
+      select = get(this.crudOptions, 'routes.findOne.select', null),
     } = query;
 
-    const whereTransformed = CrudTransformService.transform(this.crudOptions, where, req);
+    const filter = CrudTransformService.filter({
+      options: this.crudOptions,
+      data: where,
+      req: req,
+      method: 'findOne',
+    });
 
     return this.model
       .findById(id)
       .populate(populate)
       .select(select)
-      .where(whereTransformed);
+      .where(filter);
   }
 
   @Post()
-  @ApiOperation({ summary: "Create a record" })
+  @ApiOperation({ summary: 'Create a record' })
   create(@Body() body: CrudPlaceholderDto, @Request() req) {
-    const createBody = CrudTransformService.transform(this.crudOptions, body, req);
+    const createBody = CrudTransformService.transform({
+      options: this.crudOptions,
+      data: body,
+      req: req,
+      method: 'create',
+    });
     return this.model.create(createBody);
   }
 
-  @Put(":id")
-  @ApiOperation({ summary: "Update a record" })
-  update(@Param("id") id: string, @Body() body: CrudPlaceholderDto, @Request() req) {
-    const updateBody = CrudTransformService.transform(this.crudOptions, body, req);
-    return this.model.findOneAndUpdate({ _id: id }, updateBody, {
+  @Put(':id')
+  @ApiOperation({ summary: 'Update a record' })
+  update(@Param('id') id: string, @Body() body: CrudPlaceholderDto, @Request() req) {
+    const updateBody = CrudTransformService.transform({
+      options: this.crudOptions,
+      data: body,
+      req: req,
+      method: 'update',
+    });
+    const filter = CrudTransformService.filter({
+      options: this.crudOptions,
+      data: { _id: id },
+      req: req,
+      method: 'update',
+    });
+    return this.model.findOneAndUpdate(filter, updateBody, {
       new: true,
       upsert: false,
-      runValidators: true
+      runValidators: true,
     });
   }
 
-  @Delete(":id")
-  @ApiOperation({ summary: "Delete a record" })
-  delete(@Param("id") id: string, @Request() req) {
-    const conditions = CrudTransformService.transform(this.crudOptions, { _id: id}, req);
-    return this.model.findOneAndRemove(conditions);
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a record' })
+  delete(@Param('id') id: string, @Request() req) {
+    const filter = CrudTransformService.filter({
+      options: this.crudOptions,
+      data: { _id: id },
+      req: req,
+      method: 'delete',
+    });
+    return this.model.findOneAndRemove(filter);
   }
 }

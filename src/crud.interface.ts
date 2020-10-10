@@ -11,6 +11,7 @@ export interface CrudRoute {
 export interface CrudRouteWithDto extends CrudRoute {
   dto?: any
   transform?: (data: any, req: any) => any
+  filter?: (data: any, req: any) => any
 }
 export interface CrudRouteForFind extends CrudRoute {
   paginate?: PaginateKeys | false
@@ -19,17 +20,18 @@ export interface CrudRouteForFind extends CrudRoute {
   populate?: string | any
   sort?: string | any
   where?: any
-  transform?: (data: any, req: any) => any
+  filter?: (data: any, req: any) => any
 }
 
 export interface CrudRouteForGlobal {
   transform?: (data: any, req: any) => any
+  filter?: (data: any, req: any) => any
 }
 
 export interface CrudRouteForFindOne extends CrudRoute {
   populate?: string | any
   where?: any
-  transform?: (data: any, req: any) => any
+  filter?: (data: any, req: any) => any
   select?: any
 }
 

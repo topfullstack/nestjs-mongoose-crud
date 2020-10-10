@@ -42,15 +42,17 @@ Nest.js crud module for mongoose models **without** `@nestjsx/crud`
     @Crud({
       model: User,
       routes: {
-       global: { // global transform function for all routes, applies first
-         transform: (data, req)  => {
+       global: { // global routes handlers for all routes, applies first
+         transform: (data, req)  => { //transform persisting data
+            return {...data, user: req.user._id};   
+         },
+         filter: (data, req)  => { //apply filter for crud operations
             return {...data, user: req.user._id};   
          } 
        },
        find: { 
-         transform: (data, req) => {
-            const {user, ...resultData} = data;
-            return resultData; 
+         filter: (data, req) => {
+            return {...data, user: req.user._id};
          }  
        }
      }   
