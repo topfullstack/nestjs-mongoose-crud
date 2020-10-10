@@ -18,7 +18,9 @@ const UserModel = mongoose.model(
   new mongoose.Schema(
     {
       username: String,
-      age: Number
+      age: Number,
+      test: Boolean,
+      testPersist: String,
     },
     {
       timestamps: true
@@ -28,7 +30,7 @@ const UserModel = mongoose.model(
 
 describe("CrudController e2e", () => {
   @Crud({
-    model: UserModel
+    model: UserModel,
   })
   @Controller('/users')
   class UserController {
@@ -55,9 +57,6 @@ describe("CrudController e2e", () => {
     app = moduleRef.createNestApplication();
     await app.init();
   });
-  afterAll(() => {
-    mongoose.disconnect();
-  });
   describe("create", () => {
     it("should return paginated users", async () => {
       return request(app.getHttpServer())
@@ -65,7 +64,77 @@ describe("CrudController e2e", () => {
       .expect(200)
       .expect(res => expect(res.body.data.length).toBe(8))
     });
+    // end of it()
+  });
+});
 
+describe("CrudController e2e test routes handlers", () => {
+  @Crud({
+    model: UserModel,
+    routes: {
+      global: {
+        filter: (data, request) => {
+          return {...data,test: true};
+        },
+        transform:(data,request) => {
+          return {...data, testPersist: 'test'};
+        }
+      }
+    }
+  })
+  @Controller('/users')
+  class UserController {
+    private model;
+    constructor() {
+      this.model = UserModel;
+    }
+  }
+  let app: INestApplication;
+  let totalUsers = 57
+
+  beforeAll(async () => {
+    await UserModel.deleteMany({});
+    const users = Array(totalUsers)
+      .fill(1)
+      .map((v, i) => ({
+        username: `user${i}`,
+        age: Math.floor(Math.random() * 100)
+      }));
+    await UserModel.insertMany(users);
+    await UserModel.create({
+      username: 'test_user',
+      age: 123,
+      test: true,
+    });
+    const moduleRef = await Test.createTestingModule({
+      controllers: [UserController],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    await app.init();
+  });
+  afterAll(() => {
+    mongoose.disconnect();
+  });
+  describe("get", () => {
+    it("should return one test user", async () => {
+      return request(app.getHttpServer())
+        .get(`/users`)
+        .expect(200)
+        .expect(res => expect(res.body.data.length).toBe(1))
+    });
+    // end of it()
+  });
+  describe("post", () => {
+    it("should create user with field testPersist=test", async () => {
+      return request(app.getHttpServer())
+        .post(`/users`).send({
+          username: 'test_user2',
+          age: 234,
+          test: true,
+        })
+        .expect(201)
+        .expect(res => expect(res.body.testPersist).toEqual('test'))
+    });
     // end of it()
   });
 });
