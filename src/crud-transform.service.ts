@@ -16,13 +16,13 @@ export default class CrudTransformService {
     return CrudTransformService.apply(filterGlobal, filter, data, req);
   }
 
-  static apply(global, local, data, req) {
+  static apply(globalHandler, localHandler, data, req) {
     let resultData = data;
-    if (isFunction(global)) {
-      resultData = global(data, req);
+    if (isFunction(globalHandler)) {
+      resultData = globalHandler(resultData, req);
     }
-    if (isFunction(local)) {
-      resultData = local(data, req);
+    if (isFunction(localHandler)) {
+      resultData = localHandler(resultData, req);
     }
 
     return resultData;
