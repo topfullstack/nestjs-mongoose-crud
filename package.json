@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "test": "jest",
     "serve": "tsc --watch"
   },
   "devDependencies": {

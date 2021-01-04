@@ -1,5 +1,4 @@
 import { Test } from "@nestjs/testing";
-import { CrudController } from "./crud.controller";
 import * as mongoose from "mongoose";
 import { INestApplication, Controller } from "@nestjs/common";
 import * as request from "supertest";
@@ -28,7 +27,8 @@ const UserModel = mongoose.model(
 
 describe("CrudController e2e", () => {
   @Crud({
-    model: UserModel
+    model: UserModel,
+    
   })
   @Controller('/users')
   class UserController {
@@ -38,6 +38,7 @@ describe("CrudController e2e", () => {
     }
   }
   let app: INestApplication;
+  let server: any
   let totalUsers = 57
 
   beforeAll(async () => {
@@ -48,19 +49,26 @@ describe("CrudController e2e", () => {
         username: `user${i}`,
         age: Math.floor(Math.random() * 100)
       }));
-    await UserModel.insertMany(users);
+    await UserModel.insertMany(users as any[]);
     const moduleRef = await Test.createTestingModule({
       controllers: [UserController]
     }).compile();
     app = moduleRef.createNestApplication();
     await app.init();
+    server = app.getHttpServer()
   });
   afterAll(() => {
     mongoose.disconnect();
   });
   describe("create", () => {
+    it('should create a user', async () => {
+      return request(server)
+      .post('/users')
+      .send({username: `test1`})
+      .expect(res => expect(res.body).toHaveProperty('_id'))
+    })
     it("should return paginated users", async () => {
-      return request(app.getHttpServer())
+      return request(server)
       .get(`/users?query={"limit":8}`)
       .expect(200)
       .expect(res => expect(res.body.data.length).toBe(8))
