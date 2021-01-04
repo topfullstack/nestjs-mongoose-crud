@@ -1,6 +1,7 @@
 {
   "name": "nestjs-mongoose-crud",
-  "version": "2.0.1",
+  "description": "mongoose restful crud api for nest.js",
+  "version": "2.1.0",
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
   "license": "MIT",
