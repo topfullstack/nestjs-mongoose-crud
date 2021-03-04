@@ -52,7 +52,8 @@ export class CrudController {
       page = 1,
       skip = 0,
       populate = get(this.crudOptions, "routes.find.populate", undefined),
-      sort = get(this.crudOptions, "routes.find.sort", undefined)
+      sort = get(this.crudOptions, "routes.find.sort", undefined),
+      collation = undefined
     } = query;
 
     if (skip < 1) {
@@ -72,7 +73,8 @@ export class CrudController {
         .skip(skip)
         .limit(limit)
         .sort(sort)
-        .populate(populate);
+        .populate(populate)
+        .collation(collation);
       if (paginateKeys !== false) {
         const total = await this.model.countDocuments(where);
         return {

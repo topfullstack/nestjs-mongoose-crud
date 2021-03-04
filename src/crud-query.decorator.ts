@@ -1,5 +1,6 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { Request } from "express";
+import { QueryOptions } from "mongoose";
 
 export class ICrudQuery {
   where?: any
@@ -9,6 +10,7 @@ export class ICrudQuery {
   sort?: string | any
   populate?: string | any
   select?: string | any
+  collation?: QueryOptions['collation']
 }
 
 export const CrudQuery = createParamDecorator((name = 'query', ctx: ExecutionContext) => {
