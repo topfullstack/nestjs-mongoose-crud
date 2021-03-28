@@ -147,6 +147,7 @@ export interface AvueCrudOption {
   width?: number
   column?: Field[]
   group?: Field[]
+  [key: string]: any
 }
 
 export interface AvueCrudConfig {
