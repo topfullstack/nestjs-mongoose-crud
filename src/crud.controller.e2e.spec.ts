@@ -5,13 +5,7 @@ import * as request from "supertest";
 import { Crud } from "./crud.decorator";
 
 const DB =
-  process.env.DB || "mongodb://localhost/nestjs-mongoose-crud-test-e2e";
-mongoose.connect(DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+  process.env.DB || "mongodb://localhost/test";
 
 const UserModel = mongoose.model(
   "User",
@@ -43,6 +37,22 @@ describe("CrudController e2e", () => {
   let totalUsers = 15;
 
   beforeAll(async () => {
+    await mongoose.connect(DB, {
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
+      // useCreateIndex: true,
+      // useFindAndModify: false,
+      auth: {
+        username: 'admin',
+        password: '123456'
+      }
+    }).then(m => {
+      console.log('连接成功！')
+    }).catch(error => {
+      console.error('连接失败！')
+      console.error(error)
+    })
+
     await UserModel.deleteMany({});
     const lastNames = `阿赵钱孙李周吴郑王`;
     const users = Array(totalUsers)
@@ -64,13 +74,13 @@ describe("CrudController e2e", () => {
     mongoose.disconnect();
   });
   describe("create", () => {
-    
+
     it("should create a user", async () => {
       return request(server)
         .post("/users")
         .send({ username: `test1` })
         .expect((res) => expect(res.body).toHaveProperty("_id"));
-    });
+    }, 30000);
     it("should sort chinese name", async () => {
       return request(server)
         .get(`/users?query={"limit":8,"sort":"name","collation":{"locale":"zh"}}`)
@@ -79,7 +89,7 @@ describe("CrudController e2e", () => {
           expect(res.body.data).toHaveLength(8)
           expect(res.body.data[1]).toMatchObject({ name: "阿" });
         });
-    });
+    }, 30000);
     // end of it()
   });
 });
