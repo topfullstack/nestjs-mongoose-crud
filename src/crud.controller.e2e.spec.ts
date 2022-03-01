@@ -7,10 +7,11 @@ import { Crud } from "./crud.decorator";
 const DB =
   process.env.DB || "mongodb://localhost/nestjs-mongoose-crud-test-e2e";
 mongoose.connect(DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
+  
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
+  // useCreateIndex: true,
+  // useFindAndModify: false,
 });
 
 const UserModel = mongoose.model(

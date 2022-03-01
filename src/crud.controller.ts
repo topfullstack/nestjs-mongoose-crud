@@ -1,4 +1,4 @@
-import { Model, Document } from "mongoose";
+import { Model } from "mongoose";
 import {
   Get,
   Param,
@@ -6,15 +6,13 @@ import {
   Put,
   Delete,
   Body,
-  Query,
   Req
 } from "@nestjs/common";
 import { ApiOperation, ApiQuery } from "@nestjs/swagger";
 import { CrudQuery, ICrudQuery } from "./crud-query.decorator";
-import { CrudConfig, defaultPaginate } from "./crud-config";
-import { get, merge } from "lodash";
-import { CrudOptionsWithModel, PaginateKeys, Fields } from "./crud.interface";
-import { CRUD_FIELD_METADATA } from "./constants";
+import { defaultPaginate } from "./crud-config";
+import { get } from "lodash";
+import { CrudOptionsWithModel, PaginateKeys } from "./crud.interface";
 
 export class CrudPlaceholderDto {
   fake?: string;
@@ -68,7 +66,7 @@ export class CrudController {
 
     const find = async () => {
       const data = await this.model
-        .find()
+        .find(null, null, {strictQuery: false})
         .where(where)
         .skip(skip)
         .limit(limit)
@@ -76,7 +74,7 @@ export class CrudController {
         .populate(populate)
         .collation(collation);
       if (paginateKeys !== false) {
-        const total = await this.model.countDocuments(where);
+        const total = await this.model.countDocuments(where, {strictQuery: false});
         return {
           [paginateKeys.total]: total,
           [paginateKeys.data]: data,
@@ -98,7 +96,7 @@ export class CrudController {
       select = get(this.crudOptions, "routes.findOne.select", null)
     } = query;
     return this.model
-      .findById(id)
+      .findById(id, null, {strictQuery: false})
       .populate(populate)
       .select(select)
       .where(where);
